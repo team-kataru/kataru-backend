@@ -20,4 +20,9 @@ git init
 
 Make first commit:
 git add .
-git commit -m"Initial Commit"
+
+git commit -m “chore: Initial commit”
+
+Create repository on github
+
+git remote add origin https://github.com/team-kataru/kataru-backend
