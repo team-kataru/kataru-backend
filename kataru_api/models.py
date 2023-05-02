@@ -10,4 +10,11 @@ class TimestampedModel(models.Model):
     class Meta:
         abstract = True
 
+class Genre(TimestampedModel):
+    level = models.CharField(max_length=30)
+    category = models.CharField(max_length=30)
+
+    class Meta:
+        db_table = 'genre'
+
 
