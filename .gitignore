@@ -15,5 +15,7 @@ media
 
 venv
 
+kataru/.env
+
 kataru_api/fixtures/genre_0001.yaml
 kataru_api/fixtures/prompt_0001.yaml
