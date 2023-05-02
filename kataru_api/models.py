@@ -17,4 +17,9 @@ class Genre(TimestampedModel):
     class Meta:
         db_table = 'genre'
 
+class Prompt(TimestampedModel):
+    prompt_text = models.TextField()
+    genre = models.ForeignKey("Genre", on_delete=models.PROTECT)
 
+    class Meta:
+        db_table = 'prompt'
