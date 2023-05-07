@@ -17,7 +17,7 @@ class GenreSerializer(serializers.ModelSerializer):
         def update(self, instance, validated_data):
             instance.level = validated_data.get('level', instance.level)
             instance.category = validated_data.get('category', instance.category)
-            instance.modified_at = validated_data.get('modified_at', instance.modified_at)
+            instance.updated_at = validated_data.get('updated_at', instance.updated_at)
             instance.save()
             return instance
         
