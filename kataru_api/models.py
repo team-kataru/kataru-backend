@@ -3,12 +3,16 @@ from django.utils import timezone
 
 # Create your models here.
 
+"""Create Timestamp Class Template for All Models"""
+
 class TimestampedModel(models.Model):
     created_at = models.DateTimeField(default=timezone.now, editable=False)
-    modified_at = models.DateTimeField(default=timezone.now, editable=True)
+    updated_at = models.DateTimeField(default=timezone.now, editable=True)
 
     class Meta:
         abstract = True
+
+"""Genre Model"""
 
 class Genre(TimestampedModel):
     level = models.CharField(max_length=30)
@@ -17,12 +21,16 @@ class Genre(TimestampedModel):
     class Meta:
         db_table = 'genre'
 
+"""Prompt Model"""
+
 class Prompt(TimestampedModel):
     prompt_text = models.TextField()
     genre = models.ForeignKey("Genre", on_delete=models.PROTECT)
 
     class Meta:
         db_table = 'prompt'
+
+"""User Model"""
 
 class User(TimestampedModel):
     first_name = models.CharField(max_length=30)
