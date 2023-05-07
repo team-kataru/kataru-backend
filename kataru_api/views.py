@@ -1,6 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import GenreSerializer
+from .serializers import GenreSerializer, PromptSerializer
 from .models import Genre, Prompt, User
 
 """
@@ -27,6 +27,27 @@ def genres(request):
     
     elif request.method == 'POST':
         serializer = GenreSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+
+"""
+Prompts View
+"""
+
+@api_view(['GET', 'POST'])
+def prompts(request):
+    """
+    List all prompts or create a new prompt.
+    """
+    if request.method == 'GET':
+        prompts = Prompt.objects.all()
+        serializer = PromptSerializer(prompts, many=True)
+        return Response(serializer.data)
+    
+    elif request.method == 'POST':
+        serializer = PromptSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=201)
