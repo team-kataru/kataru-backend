@@ -1,12 +1,11 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import GenreSerializer, PromptSerializer
+from .serializers import GenreSerializer, PromptSerializer, UserSerializer
 from .models import Genre, Prompt, User
 
 """
 Test View
 """
-
 @api_view(['GET'])
 def hello_world(request):
     return Response({'message': 'Hello, world!'})
@@ -14,7 +13,6 @@ def hello_world(request):
 """
 Genres View
 """
-
 @api_view(['GET', 'POST'])
 def genres(request):
     """
@@ -35,7 +33,6 @@ def genres(request):
 """
 Prompts View
 """
-
 @api_view(['GET', 'POST'])
 def prompts(request):
     """
@@ -52,3 +49,24 @@ def prompts(request):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+    
+"""
+Users View
+"""
+@api_view(['GET', 'POST'])
+def users(request):
+    """
+    List all users or create a new user.
+    """
+    if request.method == 'GET':
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+    
+    
