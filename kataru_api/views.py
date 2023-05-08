@@ -51,7 +51,7 @@ def genres_id(request, pk):
         serializer = GenreSerializer(genre, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, statu=200)
+            return Response(serializer.data, status=200)
         else:
             return Response(serializer.errors, status=400)
         
@@ -74,7 +74,7 @@ def prompts(request):
     if request.method == 'GET':
         prompts = Prompt.objects.all()
         serializer = PromptSerializer(prompts, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=200)
     
     elif request.method == 'POST':
         serializer = PromptSerializer(data=request.data)
@@ -82,6 +82,39 @@ def prompts(request):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+
+@api_view(['GET', 'PATCH', 'DELETE'])
+def prompts_id(request, pk):
+    """
+    List, update or delete one prompt by id.
+    """
+    if request.method == 'GET':
+        try:
+            prompt = Prompt.objects.get(pk=pk)
+        except Prompt.DoesNotExist:
+            return Response(status=404)
+        serializer = PromptSerializer(prompt)
+        return Response(serializer.data, status=200)
+    
+    elif request.method == 'PATCH':
+        try:
+            prompt = Prompt.objects.get(pk=pk)
+        except Prompt.DoesNotExist:
+            return Response(status=404)
+        serializer=PromptSerializer(prompt, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=200)
+        else:
+            return Response(serializer.errors, status=400)
+    
+    elif request.method == 'DELETE':
+        try: 
+            prompt = Prompt.objects.get(pk=pk)
+        except Prompt.DoesNotExist:
+            return Response(status=404)
+        prompt.delete()
+        return Response(status=204)
 
 """
 Users Views
@@ -94,7 +127,7 @@ def users(request):
     if request.method == 'GET':
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=200)
     
     elif request.method == 'POST':
         serializer = UserSerializer(data=request.data)
@@ -114,7 +147,7 @@ def users_id(request, pk):
         except User.DoesNotExist:
             return Response(status=404)
         serializer = UserSerializer(user)
-        return Response(serializer.data)
+        return Response(serializer.data, status=200)
     
     elif request.method == 'PATCH':
         try:
