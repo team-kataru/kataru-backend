@@ -18,5 +18,5 @@ venv
 kataru/.env
 
 kataru_api/fixtures/
-
 kataru_api/test_get_post_data.py
+kataru_api/temp.py
