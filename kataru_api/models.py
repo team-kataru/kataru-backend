@@ -44,4 +44,19 @@ class User(TimestampedModel):
     email = models.CharField(max_length=30)
 
     class Meta:
-        db_table = 'user_' #trailing underscore to avoid keyword conflict
+        #trailing underscore to avoid keyword conflict
+        db_table = 'user_' 
+
+"""
+Entry Model
+"""
+
+class Entry(TimestampedModel):
+    entry_text = models.TextField()
+    user = models.ForeignKey('User', on_delete=models.PROTECT)
+    story = models.ForeignKey('Story', on_delete=models.PROTECT)
+    genre = models.ForeignKey('Genre', on_delete=models.PROTECT)
+    prompt = models.ForeignKey('`Prompt', on_delete=models.PROTECT)
+
+    class Meta:
+        db_table = 'entry'
