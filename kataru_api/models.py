@@ -60,3 +60,15 @@ class Entry(TimestampedModel):
 
     class Meta:
         db_table = 'entry'
+
+"""
+Story Model
+"""
+
+class Story(TimestampedModel):
+    title = models.CharField(max_length=100)
+    user = models.ForeignKey('User', on_delete=models.PROTECT)
+    genre = models.ForeignKey('Genre', on_delete=models.PROTECT)
+
+    class Meta:
+        db_table = 'story'
