@@ -72,3 +72,12 @@ class Story(TimestampedModel):
 
     class Meta:
         db_table = 'story'
+
+"""
+Prompt Registry Model
+"""
+
+class Prompt_Registry(TimestampedModel):
+    user = models.ForeignKey('User', on_delete=models.PROTECT)
+    prompt = models.ForeignKey('Prompt', on_delete=models.PROTECT)
+    
