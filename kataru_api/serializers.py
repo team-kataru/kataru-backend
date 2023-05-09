@@ -95,4 +95,26 @@ class EntrySerializer(serializers.ModelSerializer):
         def delete(self, instance):
             instance.delete()
 
+class StorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Story
+        fields = ('title', 'user_id', 'genre_id', 'created_at', 'updated_at')
+
+        def create(self, validated_data):
+            return Story.objects.create(**validated_data)
+        
+        def retrieve(self, instance):
+            return instance
+        
+        def update(self, instance, validated_data):
+            instance.title = validated_data.get('title', instance.title)
+            instance.user_id = validated_data.get('user_id', instance.user_id)
+            instance.genre_id = validated_data.get('genre_id', instance.genre_id)
+            instance.updated_at = validated_data.get('updated_at', instance.updated_at)
+            instance.save()
+            return instance
+        
+        def delete(self, instance):
+            instance.delete()
+            
 
