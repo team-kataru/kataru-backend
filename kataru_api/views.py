@@ -189,3 +189,36 @@ def entries(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PATCH', 'DELETE'])
+def entries_id(request, pk):
+    """
+    List, update or delete one entry by id.
+    """
+    if request.method == 'GET':
+        try:
+            entry = Entry.objects.get(pk=pk)
+        except Entry.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = EntrySerializer(entry)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    elif request.method == 'PATCH':
+        try:
+            entry = Entry.objects.get(pk=pk)
+        except Entry.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = EntrySerializer(entry, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        try:
+            entry = Entry.objects.get(pk=pk)
+        except Entry.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        entry.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
