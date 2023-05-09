@@ -1,8 +1,8 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import GenreSerializer, PromptSerializer, UserSerializer, EntrySerializer
-from .models import Genre, Prompt, User, Entry
+from .serializers import GenreSerializer, PromptSerializer, UserSerializer, EntrySerializer, StorySerializer
+from .models import Genre, Prompt, User, Entry, Story
 
 """
 Test View
@@ -171,7 +171,7 @@ def users_id(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 """
-Entries View
+Entries Views
 """
 @api_view(['GET', 'POST'])
 def entries(request):
@@ -221,4 +221,57 @@ def entries_id(request, pk):
         except Entry.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         entry.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+"""
+Stories Views
+"""
+@api_view(['GET', 'POST'])
+def stories(request):
+    """
+    List all stories or create a new story.
+    """
+    if request.method == 'GET':
+        stories = Story.objects.all()
+        serializer = StorySerializer(stories, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    elif request.method == 'POST':
+        serializer = StorySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['GET', 'PATCH', 'DELETE'])
+def stories_id(request, pk):
+    """
+    List, update or delete one story by id.
+    """
+    if request.method == 'GET':
+        try:
+            story = Story.objects.get(pk=pk)
+        except Story.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = StorySerializer(story)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    elif request.method == 'PATCH':
+        try:
+            story = Story.objects.get(pk=pk)
+        except Story.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = StorySerializer(story, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+    elif request.method == 'DELETE':
+        try:
+            story = Story.objects.get(pk=pk)
+        except Story.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        story.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
