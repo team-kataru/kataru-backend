@@ -10,4 +10,6 @@ urlpatterns = [
     path('prompts/<int:pk>/', views.prompts_id, name='prompts_id'),
     path('users/', views.users, name='users'),
     path('users/<int:pk>/', views.users_id, name='users_id'),
+    path('entries/', views.entries, name='entries'),
+    path('entries/<int:pk>/', views.entries_id, name='entries_id'),
 ]
