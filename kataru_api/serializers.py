@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Genre, Prompt, User
+from .models import Genre, Prompt, User, Entry, Story, Prompt_Registry
 
 """
 Create CRUD serializers for each model
@@ -71,4 +71,28 @@ class UserSerializer(serializers.ModelSerializer):
         def delete(self, instance):
             instance.delete()
     
+class EntrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Entry
+        fields = ('entry_text', 'user_id', 'story_id', 'genre_id', 'prompt_id', 'created_at', 'updated_at')
+
+        def create(self, validated_data):
+            return Entry.objects.create(**validated_data)
         
+        def retrieve(self, instance):
+            return instance
+        
+        def update(self, instance, validated_data):
+            instance.entry_text = validated_data.get('entry_text', instance.entry_text)
+            instance.user_id = validated_data.get('user_id', instance.user_id)
+            instance.story_id = validated_data.get('story_id', instance.story_id)
+            instance.genre_id = validated_data.get('genre_id', instance.genre_id)
+            instance.prompt_id = validated_data.get('prompt_id', instance.prompt_id)
+            instance.updated_at = validated_data.get('updated_at', instance.updated_at)
+            instance.save()
+            return instance
+        
+        def delete(self, instance):
+            instance.delete()
+
+
