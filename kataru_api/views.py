@@ -1,8 +1,8 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import GenreSerializer, PromptSerializer, UserSerializer
-from .models import Genre, Prompt, User
+from .serializers import GenreSerializer, PromptSerializer, UserSerializer, EntrySerializer
+from .models import Genre, Prompt, User, Entry
 
 """
 Test View
@@ -169,3 +169,23 @@ def users_id(request, pk):
             return Response(status=status.HTTP_404_NOT_FOUND)
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+"""
+Entries View
+"""
+@api_view(['GET', 'POST'])
+def entries(request):
+    """
+    List all entries or create a new entry
+    """
+    if request.method == 'GET':
+        entries = Entry.objects.all()
+        serializer = EntrySerializer(entries, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    elif request.method == 'POST':
+        serializer = EntrySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
