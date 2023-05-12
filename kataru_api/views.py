@@ -1,8 +1,8 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import GenreSerializer, PromptSerializer, UserSerializer, EntrySerializer, StorySerializer
-from .models import Genre, Prompt, User, Entry, Story
+from .serializers import GenreSerializer, PromptSerializer, UserSerializer, EntrySerializer, StorySerializer, PromptRegistrySerializer
+from .models import Genre, Prompt, User, Entry, Story, PromptRegistry
 
 """
 Test View
@@ -275,3 +275,13 @@ def stories_id(request, pk):
             return Response(status=status.HTTP_404_NOT_FOUND)
         story.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+"""
+PromptRegistry Views
+"""
+@api_view(['GET'])
+def prompt_registries(request, user_id):
+    user_id = User.objects.get(id=user_id)
+    user_prompts = PromptRegistry.objects.filter(user_id=user_id)
+    serializer = PromptRegistrySerializer(user_prompts, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
