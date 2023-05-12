@@ -189,6 +189,16 @@ def user_entries(request, user_id):
     user_entries = Entry.objects.filter(user_id=user_id)
     serializer = EntrySerializer(user_entries, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def user_stories(request, user_id):
+    """
+    List all user stories by user id.
+    """
+    user_id = User.objects.get(id=user_id)
+    user_stories = Story.objects.filter(user_id=user_id)
+    serializer = StorySerializer(user_stories, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
     
 """
 Entries Views
