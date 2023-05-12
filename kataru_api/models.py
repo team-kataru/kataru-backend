@@ -77,7 +77,7 @@ class Story(TimestampedModel):
 Prompt Registry Model
 """
 
-class Prompt_Registry(TimestampedModel):
+class PromptRegistry(TimestampedModel):
     user = models.ForeignKey('User', on_delete=models.PROTECT)
     prompt = models.ForeignKey('Prompt', on_delete=models.PROTECT)
 
