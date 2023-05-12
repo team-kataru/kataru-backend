@@ -169,6 +169,17 @@ def users_id(request, pk):
             return Response(status=status.HTTP_404_NOT_FOUND)
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET'])
+def user_prompts(request, user_id):
+    """
+    List all prompts per user id.
+    """
+    user_id = User.objects.get(id=user_id)
+    user_prompts = PromptRegistry.objects.filter(user_id=user_id)
+    serializer = PromptRegistrySerializer(user_prompts, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
     
 """
 Entries Views
@@ -276,12 +287,3 @@ def stories_id(request, pk):
         story.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-"""
-PromptRegistry Views
-"""
-@api_view(['GET'])
-def prompt_registries(request, user_id):
-    user_id = User.objects.get(id=user_id)
-    user_prompts = PromptRegistry.objects.filter(user_id=user_id)
-    serializer = PromptRegistrySerializer(user_prompts, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)

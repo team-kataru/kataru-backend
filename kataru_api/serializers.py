@@ -118,10 +118,10 @@ class StorySerializer(serializers.ModelSerializer):
             instance.delete()
 
 class PromptRegistrySerializer(serializers.ModelSerializer):
-    user = UserSerializer()
-    prompt = PromptSerializer()
+    user_name = serializers.CharField(source='user.user_name')
+    prompt_text = serializers.CharField(source='prompt.prompt_text')
 
     class Meta:
         model = PromptRegistry
-        fields = '__all__'
-        # fields = ('id', 'user_id', 'prompt_id')
+        # fields = '__all__'
+        fields = ('id', 'user_id', 'prompt_id', 'user_name', 'prompt_text', 'created_at', 'updated_at')
