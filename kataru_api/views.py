@@ -180,6 +180,15 @@ def user_prompts(request, user_id):
     serializer = PromptRegistrySerializer(user_prompts, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+def user_entries(request, user_id):
+    """
+    List all user entries by user id.
+    """
+    user_id = User.objects.get(id=user_id)
+    user_entries = Entry.objects.filter(user_id=user_id)
+    serializer = EntrySerializer(user_entries, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
     
 """
 Entries Views
