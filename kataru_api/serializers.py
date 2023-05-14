@@ -125,6 +125,14 @@ class UserStorySerializer(serializers.ModelSerializer):
         model = Story
         fields = ('id', 'user_id', 'user_name', 'title')
 
+class UserStoryEntrySerializer(UserStorySerializer):
+    story_id = serializers.CharField(source='story.id', read_only=True)
+    title = serializers.CharField(source='story.title', read_only=True)
+
+    class Meta:
+        model = Entry
+        fields = ('id', 'user_id', 'story_id', 'user_name', 'title', 'entry_text')
+
 class PromptRegistrySerializer(serializers.ModelSerializer):
     user_name = serializers.CharField(source='user.user_name')
     prompt_text = serializers.CharField(source='prompt.prompt_text')
