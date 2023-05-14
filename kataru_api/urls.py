@@ -14,6 +14,7 @@ urlpatterns = [
     path('users/<int:user_id>/entries/', views.users_id_entries, name='users_id_entries'),
     path('users/<int:user_id>/stories/', views.users_id_stories, name='users_id_stories'),
     path('users/<int:user_id>/stories/<int:story_id>/', views.users_id_stories_id, name='user_id_stories_id'),
+    path('users/<int:user_id>/stories/<int:story_id>/entries/', views.users_id_stories_id_entries, name='user_id_stories_id_entries'),
     path('entries/', views.entries, name='entries'),
     path('entries/<int:pk>/', views.entries_id, name='entries_id'),
     path('stories/', views.stories, name='stories'),
