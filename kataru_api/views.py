@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import GenreSerializer, PromptSerializer, UserSerializer, EntrySerializer, StorySerializer, PromptRegistrySerializer, UserStorySerializer
+from .serializers import GenreSerializer, PromptSerializer, UserSerializer, EntrySerializer, StorySerializer, PromptRegistrySerializer, UserStorySerializer, UserStoryEntrySerializer
 from .models import Genre, Prompt, User, Entry, Story, PromptRegistry
 
 """
@@ -210,6 +210,16 @@ def users_id_stories_id(request, user_id, story_id):
     serializer = UserStorySerializer(user_story)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+def users_id_stories_id_entries(request, user_id, story_id):
+    """
+    List all entries from a user story by user and story id.
+    """
+    user_id = User.objects.get(id=user_id)
+    user_story = Story.objects.get(id=story_id)
+    user_story_entries = Entry.objects.filter(user_id=user_id, story_id=story_id)
+    serializer = UserStoryEntrySerializer(user_story_entries, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 """
 Entries Views
