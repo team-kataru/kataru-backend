@@ -171,7 +171,7 @@ def users_id(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['GET'])
-def user_prompts(request, user_id):
+def users_id_prompts(request, user_id):
     """
     List all prompts per user id.
     """
@@ -181,7 +181,7 @@ def user_prompts(request, user_id):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-def user_entries(request, user_id):
+def users_id_entries(request, user_id):
     """
     List all user entries by user id.
     """
@@ -191,7 +191,7 @@ def user_entries(request, user_id):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-def user_stories(request, user_id):
+def users_id_stories(request, user_id):
     """
     List all user stories by user id.
     """
@@ -201,7 +201,7 @@ def user_stories(request, user_id):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-def user_stories_id(request, user_id, story_id):
+def users_id_stories_id(request, user_id, story_id):
     """
     List all user stories by user id.
     """
