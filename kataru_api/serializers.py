@@ -117,6 +117,14 @@ class StorySerializer(serializers.ModelSerializer):
         def delete(self, instance):
             instance.delete()
 
+class UserStorySerializer(serializers.ModelSerializer):
+    user_id = serializers.CharField(source='user.id', read_only=True)
+    user_name = serializers.CharField(source='user.user_name', read_only=True)
+
+    class Meta:
+        model = Story
+        fields = ('id', 'user_id', 'user_name', 'title')
+
 class PromptRegistrySerializer(serializers.ModelSerializer):
     user_name = serializers.CharField(source='user.user_name')
     prompt_text = serializers.CharField(source='prompt.prompt_text')
@@ -125,3 +133,4 @@ class PromptRegistrySerializer(serializers.ModelSerializer):
         model = PromptRegistry
         # fields = '__all__'
         fields = ('id', 'user_id', 'prompt_id', 'user_name', 'prompt_text', 'created_at', 'updated_at')
+    
