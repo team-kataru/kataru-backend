@@ -175,7 +175,10 @@ def users_id_prompts(request, user_id):
     """
     List all prompts per user id.
     """
-    user_id = User.objects.get(id=user_id)
+    try:
+        user_id = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
     user_prompts = PromptRegistry.objects.filter(user_id=user_id)
     serializer = PromptRegistrySerializer(user_prompts, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
@@ -185,7 +188,10 @@ def users_id_entries(request, user_id):
     """
     List all user entries by user id.
     """
-    user_id = User.objects.get(id=user_id)
+    try:
+        user_id = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
     user_entries = Entry.objects.filter(user_id=user_id)
     serializer = EntrySerializer(user_entries, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
@@ -195,7 +201,10 @@ def users_id_stories(request, user_id):
     """
     List all user stories by user id.
     """
-    user_id = User.objects.get(id=user_id)
+    try:
+        user_id = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
     user_stories = Story.objects.filter(user_id=user_id)
     serializer = UserStorySerializer(user_stories, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
@@ -205,8 +214,14 @@ def users_id_stories_id(request, user_id, story_id):
     """
     List all user stories by user id.
     """
-    user_id = User.objects.get(id=user_id)
-    user_story = Story.objects.get(user_id=user_id, id=story_id)
+    try:
+        user_id = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    try:
+        user_story = Story.objects.get(user_id=user_id, pk=story_id)
+    except Story.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
     serializer = UserStorySerializer(user_story)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -215,9 +230,9 @@ def users_id_stories_id_entries(request, user_id, story_id):
     """
     List all entries from a user story by user and story id.
     """
-    user_id = User.objects.get(id=user_id)
-    user_story = Story.objects.get(id=story_id)
     user_story_entries = Entry.objects.filter(user_id=user_id, story_id=story_id)
+    if not user_story_entries.exists():
+        return Response(status=status.HTTP_404_NOT_FOUND)
     serializer = UserStoryEntrySerializer(user_story_entries, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
